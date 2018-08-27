@@ -61,11 +61,17 @@ def get_rfc_index(url_dwnl, filepath):
 # of RFC_LOCAL_REF. After parsing the data has to be put into a map or
 # container of some kind
 def parse_rfc_ref(filepath):
+	# the key would be the name of the RFC and the value would be the
+	# object
+	rfc_dict = {}
 	for line in inp([filepath]):
 		line = line.strip()
 		print(line)
 
-		# create the class before parsing and pushing in the data
+		# create an instance of the Rfc class and then push in the
+		# details in a container - create the container before this
+		# loop
+		rt = Rfc()
 
 # @function main
 # @details function that performs the choreographing and calls the necessary
