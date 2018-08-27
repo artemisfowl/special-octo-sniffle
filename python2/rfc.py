@@ -32,6 +32,14 @@ class Rfc:
 	def set_title(self, rfc_title):
 		self.title = rfc_title
 
+	# get data functions
+	def get_name(self):
+		return self.name
+	def get_num(self):
+		return self.num
+	def get_title(self):
+		return self.title
+
 # @function get_rfc_index
 # @details function to download the text file from the specified location. the
 # file that will be downloaded is actually the index file containing
