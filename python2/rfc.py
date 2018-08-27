@@ -5,7 +5,27 @@
 
 from __future__ import print_function
 from fileinput import input as inp
+from urllib2 import urlopen
 
+# todo handling side
+# 1. First write a program for getting the text file from the required location
+
+# globals section
+RFC_REF = 'https://www.rfc-editor.org/rfc/rfc-ref.txt'
+RFC_LOCAL_REF = './rfc-ref.txt'
+
+# @function get_rfc_index
+# @details function to download the text file from the specified location. the
+# file that will be downloaded is actually the index file containing
+# information about the RFCs that have come out
+def get_rfc_index(url_dwnl):
+	response = urlopen(RFC_REF)
+	data = response.read()
+	lines = str(data).split('\n')
+
+# @function main
+# @details function that performs the choreographing and calls the necessary
+# functions based on the requirements
 def main():
 	for line in inp(['./details_rfc']):
 		if 'RFC' in line.strip():
