@@ -15,6 +15,23 @@ from fileinput import input as inp
 RFC_REF = 'https://www.rfc-editor.org/rfc/rfc-ref.txt'
 RFC_LOCAL_REF = './rfc-ref.txt'
 
+# @class Rfc
+# @details class to contain the name of the RFC, the nuber of the same and the
+# title of the RFC
+class Rfc:
+	def __init__(self, rfc_name, rfc_num, rfc_title):
+		self.name = rfc_name
+		self.num = rfc_num
+		self.title = rfc_title
+
+	# set variable functions
+	def set_name(self, rfc_name):
+		self.name = rfc_name
+	def set_num(self, rfc_num):
+		self.num = rfc_num
+	def set_title(self, rfc_title):
+		self.title = rfc_title
+
 # @function get_rfc_index
 # @details function to download the text file from the specified location. the
 # file that will be downloaded is actually the index file containing
