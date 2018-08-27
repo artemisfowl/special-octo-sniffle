@@ -24,6 +24,11 @@ class Rfc:
 		self.num = rfc_num
 		self.title = rfc_title
 
+	def __init__(self):
+		self.name = ''
+		self.num = ''
+		self.title = ''
+
 	# set variable functions
 	def set_name(self, rfc_name):
 		self.name = rfc_name
@@ -65,13 +70,16 @@ def parse_rfc_ref(filepath):
 	# object
 	rfc_dict = {}
 	for line in inp([filepath]):
-		line = line.strip()
-		print(line)
+		if 'RFC' in line:
+			line = line.strip()
 
-		# create an instance of the Rfc class and then push in the
-		# details in a container - create the container before this
-		# loop
-		rt = Rfc()
+			# create an instance of the Rfc class and then push in the
+			# details in a container - create the container before this
+			# loop
+			rt = Rfc()
+			parsed_list = line.split('|')
+			print(len(parsed_list))
+			break
 
 # @function main
 # @details function that performs the choreographing and calls the necessary
