@@ -40,7 +40,7 @@ class Rfc:
 	def set_title(self, rfc_title):
 		self.title = rfc_title
 	def set_url(self, rfc_url):
-		self.url += rfc_url
+		self.url += rfc_url + ".txt"
 
 	# get data functions
 	def get_name(self):
@@ -74,7 +74,7 @@ def get_rfc_index(url_dwnl, filepath):
 def parse_name(plist = []):
 	for i in xrange(0, len(plist)):
 		if 'RFC' in plist[i] and str(plist[i]).find('RFC') == 0:
-			return str(plist[i])
+			return str(plist[i]).strip()
 
 # @function parse_title
 # @details function to parse the RFC title from the string provided and then
@@ -82,6 +82,12 @@ def parse_name(plist = []):
 def parse_title(item):
 	item = item.strip()
 	return str(item[item.find('"') + 1:item.rfind('"')])
+
+# @function parse_rfc_num
+# @details function to parse the name of the rfc from the input string. If not
+# found, return None
+def parse_num(item):
+	return str(item[item.rfind('/') + 1 : len(item) - 1])
 
 # @function parse_rfc_ref
 # @details function to parse the contents of the file as mentioned as the value
@@ -116,10 +122,35 @@ def parse_rfc_ref(filepath):
 			rt.set_title(parse_title(parsed_list[len(parsed_list) -
 				1]))
 
-			# get the number of the RFC
+			# get the number of the RFC, set the url as well
+			item = (parsed_list[len(parsed_list) - 1].strip())
+			rt.set_num(parse_num(item.split(',')[-1].
+				strip().strip('.')))
+			rt.set_url(parse_num(item.split(',')[-1].
+				strip().strip('.')))
 
-			if count == 5:
+			# putting another check for the non parsing of values
+			#if rt.get_name() == 'RFC8262':
+				#print(rt.get_name() + " " +
+						#rt.get_title() + " " +
+						#rt.get_num() + " " +
+						#rt.get_url())
+
+			# check if the name of the rfc is present in the
+			# dictionary or not - if not push it in, if yes, forget
+			# it
+			if rt.get_name() not in rfc_dict:
+				#print(rt.get_name())
+				rfc_dict[rt.get_name()] = rt
+			else:
+				rt.get_name()
+
+			if count == 8262:
 				break
+
+	# get the length of the dictionary
+	#print(len(rfc_dict))
+	print(rfc_dict.get('RFC1248').get_title())
 
 # @function main
 # @details function that performs the choreographing and calls the necessary
