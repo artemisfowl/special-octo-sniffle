@@ -13,6 +13,7 @@ from fileinput import input as inp
 
 # globals section
 RFC_REF = 'https://www.rfc-editor.org/rfc/rfc-ref.txt'
+RFC_URL = 'https://www.rfc-editor.org/rfc/'
 RFC_LOCAL_REF = './rfc-ref.txt'
 
 # @class Rfc
@@ -23,11 +24,13 @@ class Rfc:
 		self.name = rfc_name
 		self.num = rfc_num
 		self.title = rfc_title
+		self.url = RFC_URL
 
 	def __init__(self):
 		self.name = ''
 		self.num = ''
 		self.title = ''
+		self.url = RFC_URL
 
 	# set variable functions
 	def set_name(self, rfc_name):
@@ -36,6 +39,8 @@ class Rfc:
 		self.num = rfc_num
 	def set_title(self, rfc_title):
 		self.title = rfc_title
+	def set_url(self, rfc_url):
+		self.url += rfc_url
 
 	# get data functions
 	def get_name(self):
@@ -44,6 +49,8 @@ class Rfc:
 		return self.num
 	def get_title(self):
 		return self.title
+	def get_url(self):
+		return self.url
 
 # @function get_rfc_index
 # @details function to download the text file from the specified location. the
@@ -61,6 +68,14 @@ def get_rfc_index(url_dwnl, filepath):
 		f.write(line + '\n')
 	f.close()
 
+# @function parse_name
+# @details function to parse the name of the RFC from the line provided and
+# then return the same as the result. If not found, return None
+def parse_name(plist = []):
+	for i in xrange(0, len(plist)):
+		if 'RFC' in plist[i] and str(plist[i]).find('RFC') == 0:
+			return str(plist[i])
+
 # @function parse_rfc_ref
 # @details function to parse the contents of the file as mentioned as the value
 # of RFC_LOCAL_REF. After parsing the data has to be put into a map or
@@ -69,26 +84,40 @@ def parse_rfc_ref(filepath):
 	# the key would be the name of the RFC and the value would be the
 	# object
 	rfc_dict = {}
+
+	# experimental control
+	count = 0
 	for line in inp([filepath]):
 		if 'RFC' in line:
 			line = line.strip()
 
-			# create an instance of the Rfc class and then push in the
-			# details in a container - create the container before this
+			# experimental control
+			count += 1
+
+			# create an instance of the Rfc class and then push in
+			# the
+			# details in a container - create the container before
+			# this
 			# loop
 			rt = Rfc()
 			parsed_list = line.split('|')
-			print(len(parsed_list))
-			break
+
+			# get the name of the RFC
+			rt.set_name(parse_name(parsed_list))
+
+			if count == 3:
+				break
 
 # @function main
 # @details function that performs the choreographing and calls the necessary
 # functions based on the requirements
 def main():
 	# get the reference file downloaded
+	print('Getting the index file from the internet')
 	get_rfc_index(RFC_REF, RFC_LOCAL_REF)
 
 	# now call the function which will be reading through the file
+	print('\nParsing the information from the local file')
 	parse_rfc_ref(RFC_LOCAL_REF)
 
 	#for line in inp(['./details_rfc']):
