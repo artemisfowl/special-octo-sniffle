@@ -76,6 +76,13 @@ def parse_name(plist = []):
 		if 'RFC' in plist[i] and str(plist[i]).find('RFC') == 0:
 			return str(plist[i])
 
+# @function parse_title
+# @details function to parse the RFC title from the string provided and then
+# return the same else the value will be None
+def parse_title(item):
+	item = item.strip()
+	return str(item[item.find('"') + 1:item.rfind('"')])
+
 # @function parse_rfc_ref
 # @details function to parse the contents of the file as mentioned as the value
 # of RFC_LOCAL_REF. After parsing the data has to be put into a map or
@@ -105,7 +112,13 @@ def parse_rfc_ref(filepath):
 			# get the name of the RFC
 			rt.set_name(parse_name(parsed_list))
 
-			if count == 3:
+			# get the title of the RFC - sending in the last item
+			rt.set_title(parse_title(parsed_list[len(parsed_list) -
+				1]))
+
+			# get the number of the RFC
+
+			if count == 5:
 				break
 
 # @function main
