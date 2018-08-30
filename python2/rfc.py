@@ -8,6 +8,7 @@ from fileinput import input as inp
 from urllib2 import urlopen
 from fileinput import input as inp
 from os import path, makedirs, system
+from glob import glob
 
 # todo handling side
 # 1. First write a program for getting the text file from the required location
@@ -181,12 +182,12 @@ def main():
 		rfcstr = "RFC" + raw_input("RFC : ")
 		if rfcstr == "RFCq" or rfcstr == 'RFCQ':
 			break
-		elif rfcstr == 'RFCl':
+		elif rfcstr == 'RFCl' or rfcstr == 'RFCL':
 			# basically this will print all the RFCs already
 			# present in the system and downloaded
-			print(rfc_dict[rfc_dict.keys()[-1]].get_name() + ": " +
-					rfc_dict[rfc_dict.keys()[-1]].
-					get_title())
+			fl = glob(RFC_LOCATION + "/*.*")
+			for i in fl:
+				print(i)
 		elif rfcstr in rfc_dict:
 			print(rfc_dict[rfcstr].get_name() + " : " +
 					rfc_dict[rfcstr].get_title())
