@@ -194,12 +194,12 @@ def main():
 			# using the editors available
 			if not path.isfile(rfc_dict[rfcstr].get_name() +
 					".txt"):
-				get_rfc(rfc_dict[rfcstr].get_url(), 
-						RFC_LOCATION + "/" + 
-						rfc_dict[rfcstr].get_name() + 
+				get_rfc(rfc_dict[rfcstr].get_url(),
+						RFC_LOCATION + "/" +
+						rfc_dict[rfcstr].get_name() +
 						".txt")
-				system("vim " + RFC_LOCATION + "/" + 
-						rfc_dict[rfcstr].get_name() + 
+				system("vim " + RFC_LOCATION + "/" +
+						rfc_dict[rfcstr].get_name() +
 						".txt")
 				system("clear")
 		else:
