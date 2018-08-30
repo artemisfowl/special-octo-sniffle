@@ -7,6 +7,7 @@ from __future__ import print_function
 from fileinput import input as inp
 from urllib2 import urlopen
 from fileinput import input as inp
+from os import path, makedirs, system
 
 # todo handling side
 # 1. First write a program for getting the text file from the required location
@@ -54,11 +55,11 @@ class Rfc:
 	def get_url(self):
 		return self.url
 
-# @function get_rfc_index
+# @function get_rfc
 # @details function to download the text file from the specified location. the
 # file that will be downloaded is actually the index file containing
 # information about the RFCs that have come out
-def get_rfc_index(url_dwnl, filepath):
+def get_rfc(url_dwnl, filepath):
 	response = urlopen(url_dwnl)
 	data = response.read()
 	lines = str(data).split('\n')
@@ -161,23 +162,46 @@ def parse_rfc_ref(filepath):
 def main():
 	# get the reference file downloaded
 	print('Getting the index file from the internet')
-	get_rfc_index(RFC_REF, RFC_LOCAL_REF)
+	get_rfc(RFC_REF, RFC_LOCAL_REF)
 
 	# now call the function which will be reading through the file
 	print('\nParsing the information from the local file')
 	rfc_dict = parse_rfc_ref(RFC_LOCAL_REF)
+
+	# first check if the RFC directory has been created or not
+	# if it is not created, create the directory
+	if not path.isdir(RFC_LOCATION):
+		# create the directory
+		try:
+			makedirs(RFC_LOCATION)
+		except:
+			pass
 
 	while True:
 		rfcstr = "RFC" + raw_input("RFC : ")
 		if rfcstr == "RFCq" or rfcstr == 'RFCQ':
 			break
 		elif rfcstr == 'RFCl':
+			# basically this will print all the RFCs already
+			# present in the system and downloaded
 			print(rfc_dict[rfc_dict.keys()[-1]].get_name() + ": " +
 					rfc_dict[rfc_dict.keys()[-1]].
 					get_title())
 		elif rfcstr in rfc_dict:
 			print(rfc_dict[rfcstr].get_name() + " : " +
 					rfc_dict[rfcstr].get_title())
+			# if the RFC is found, get the file and then display it
+			# using the editors available
+			if not path.isfile(rfc_dict[rfcstr].get_name() +
+					".txt"):
+				get_rfc(rfc_dict[rfcstr].get_url(), 
+						RFC_LOCATION + "/" + 
+						rfc_dict[rfcstr].get_name() + 
+						".txt")
+				system("vim " + RFC_LOCATION + "/" + 
+						rfc_dict[rfcstr].get_name() + 
+						".txt")
+				system("clear")
 		else:
 			print(rfcstr + " doesn't exist, kindly check the RFC" +
 					"num")
