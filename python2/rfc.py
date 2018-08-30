@@ -15,6 +15,8 @@ from fileinput import input as inp
 RFC_REF = 'https://www.rfc-editor.org/rfc/rfc-ref.txt'
 RFC_URL = 'https://www.rfc-editor.org/rfc/'
 RFC_LOCAL_REF = './rfc-ref.txt'
+# this is the location where the RFC's will be downloaded
+RFC_LOCATION = "./RFC/"
 
 # @class Rfc
 # @details class to contain the name of the RFC, the nuber of the same and the
@@ -150,7 +152,8 @@ def parse_rfc_ref(filepath):
 
 	# get the length of the dictionary
 	#print(len(rfc_dict))
-	print(rfc_dict.get('RFC1248').get_title())
+	#print(rfc_dict.get('RFC1248').get_title())
+	return rfc_dict
 
 # @function main
 # @details function that performs the choreographing and calls the necessary
@@ -162,25 +165,22 @@ def main():
 
 	# now call the function which will be reading through the file
 	print('\nParsing the information from the local file')
-	parse_rfc_ref(RFC_LOCAL_REF)
+	rfc_dict = parse_rfc_ref(RFC_LOCAL_REF)
 
-	#for line in inp(['./details_rfc']):
-		#if 'RFC' in line.strip():
-			#mkey_list = line.strip().split('|')
-			#print(len(mkey_list))
-			#for i in xrange(0, len(mkey_list)):
-				#if i == 0:
-					## this is the name of the RFC
-					#print(mkey_list[i], end = '\t')
-				#elif i == len(mkey_list) -1:
-					# this is the one with the extra amount
-					# of data
-					#last_data = (mkey_list[i].strip())
-
-					## now get the title of the RFC
-					#print(last_data[last_data.index('"') +
-						#1 : last_data.rfind('",')])
-			#break
+	while True:
+		rfcstr = "RFC" + raw_input("RFC : ")
+		if rfcstr == "RFCq" or rfcstr == 'RFCQ':
+			break
+		elif rfcstr == 'RFCl':
+			print(rfc_dict[rfc_dict.keys()[-1]].get_name() + ": " +
+					rfc_dict[rfc_dict.keys()[-1]].
+					get_title())
+		elif rfcstr in rfc_dict:
+			print(rfc_dict[rfcstr].get_name() + " : " +
+					rfc_dict[rfcstr].get_title())
+		else:
+			print(rfcstr + " doesn't exist, kindly check the RFC" +
+					"num")
 
 if __name__ == '__main__':
 	main()
