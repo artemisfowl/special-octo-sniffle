@@ -198,7 +198,7 @@ def main():
 						RFC_LOCATION + "/" +
 						rfc_dict[rfcstr].get_name() +
 						".txt")
-				system("vim " + RFC_LOCATION + "/" +
+				system("nano " + RFC_LOCATION + "/" +
 						rfc_dict[rfcstr].get_name() +
 						".txt")
 				system("clear")
