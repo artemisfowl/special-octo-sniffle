@@ -12,6 +12,7 @@ from glob import glob
 
 # todo handling side
 # 1. First write a program for getting the text file from the required location
+# 2. Fix the program to handle fuzzy searching of RFC(s)
 
 # globals section
 RFC_REF = 'https://www.rfc-editor.org/rfc/rfc-ref.txt'
@@ -182,7 +183,7 @@ def main():
 		rfcstr = "RFC" + raw_input("RFC : ")
 		if rfcstr == "RFCq" or rfcstr == 'RFCQ':
 			break
-		elif rfcstr == 'RFCl' or rfcstr == 'RFCL':
+		elif rfcstr.lower() == 'rfcl':
 			# basically this will print all the RFCs already
 			# present in the system and downloaded
 			fl = glob(RFC_LOCATION + "/*.*")
