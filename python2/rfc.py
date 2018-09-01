@@ -9,6 +9,7 @@ from urllib2 import urlopen
 from fileinput import input as inp
 from os import path, makedirs, system
 from glob import glob
+from fuzzywuzzy import process
 
 # todo handling side
 # 1. First write a program for getting the text file from the required location
@@ -102,6 +103,7 @@ def parse_rfc_ref(filepath):
 	# the key would be the name of the RFC and the value would be the
 	# object
 	rfc_dict = {}
+	rtdict = {}
 
 	# experimental control
 	count = 0
@@ -148,7 +150,10 @@ def parse_rfc_ref(filepath):
 				#print(rt.get_name())
 				rfc_dict[rt.get_name()] = rt
 			else:
-				rt.get_name()
+				print(rt.get_name())
+
+			if rt.get_name() not in rtdict:
+				rtdict[rt.get_title()] = rt.get_name()
 
 			if count == 8262:
 				break
@@ -156,7 +161,7 @@ def parse_rfc_ref(filepath):
 	# get the length of the dictionary
 	#print(len(rfc_dict))
 	#print(rfc_dict.get('RFC1248').get_title())
-	return rfc_dict
+	return (rfc_dict, rtdict)
 
 # @function main
 # @details function that performs the choreographing and calls the necessary
@@ -168,7 +173,7 @@ def main():
 
 	# now call the function which will be reading through the file
 	print('\nParsing the information from the local file')
-	rfc_dict = parse_rfc_ref(RFC_LOCAL_REF)
+	rfc_dict, rtdict = parse_rfc_ref(RFC_LOCAL_REF)
 
 	# first check if the RFC directory has been created or not
 	# if it is not created, create the directory
@@ -181,7 +186,7 @@ def main():
 
 	while True:
 		rfcstr = "RFC" + raw_input("RFC : ")
-		if rfcstr == "RFCq" or rfcstr == 'RFCQ':
+		if rfcstr.lower() == "rfcq":
 			break
 		elif rfcstr.lower() == 'rfcl':
 			# basically this will print all the RFCs already
@@ -200,10 +205,17 @@ def main():
 						RFC_LOCATION + "/" +
 						rfc_dict[rfcstr].get_name() +
 						".txt")
-				system("nano " + RFC_LOCATION + "/" +
+				system("$EDITOR " + RFC_LOCATION + "/" +
 						rfc_dict[rfcstr].get_name() +
 						".txt")
 				system("clear")
+		elif rfcstr not in rfc_dict:
+			# get the match ratio of the string, show the results
+			output = process.extract(rfcstr[3:],
+					rtdict.keys(), limit = 30)
+			for i in output:
+				print(i[0] + " : " +
+						rtdict.get(i[0]))
 		else:
 			print(rfcstr + " doesn't exist, kindly check the RFC" +
 					"num")
